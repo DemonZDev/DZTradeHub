@@ -1,0 +1,90 @@
+package online.demonzdevelopment.dztradehub.commands;
+
+import online.demonzdevelopment.dztradehub.DZTradeHub;
+import online.demonzdevelopment.dztradehub.data.bank.AccountType;
+import online.demonzdevelopment.dztradehub.data.bank.Bank;
+import online.demonzdevelopment.dztradehub.data.bank.BankAccount;
+import online.demonzdevelopment.dztradehub.managers.bank.BankAccountManager;
+import online.demonzdevelopment.dztradehub.managers.bank.BankManager;
+import online.demonzdevelopment.dztradehub.managers.bank.BankQueueManager;
+import online.demonzdevelopment.dztradehub.utils.MessageUtil;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class DynamicBankCommand implements CommandExecutor {
+    private final DZTradeHub plugin;
+    private final String bankName;
+    private BankManager bankManager;
+    private BankAccountManager accountManager;
+    private BankQueueManager queueManager;
+    
+    // Password input tracking
+    private final Map<UUID, PasswordInputState> passwordInputs;
+    
+    public DynamicBankCommand(DZTradeHub plugin, String bankName) {
+        this.plugin = plugin;
+        this.bankName = bankName;
+        this.passwordInputs = new HashMap<>();
+    }
+    
+    public void setManagers(BankManager bankManager, BankAccountManager accountManager, BankQueueManager queueManager) {
+        this.bankManager = bankManager;
+        this.accountManager = accountManager;
+        this.queueManager = queueManager;
+    }
+    
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, 
+                           @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("§cOnly players can use this command!");
+            return true;
+        }
+        
+        if (bankManager == null) {
+            MessageUtil.sendError(player, "Bank system is not initialized!");
+            return true;
+        }
+        
+        Bank bank = bankManager.getBankByName(bankName);
+        if (bank == null) {
+            MessageUtil.sendError(player, "Bank not found!");
+            return true;
+        }
+        
+        // /<bank_name> - Open bank (join queue or access account)
+        if (args.length == 0) {
+            handleBankAccess(player, bank);
+            return true;
+        }
+        
+        String subCommand = args[0].toLowerCase();
+        
+        switch (subCommand) {
+            case "create":
+                if (args.length < 3) {
+                    MessageUtil.sendError(player, "Usage: /" + bankName + " create <account_type> <password>");
+                    player.sendMessage("§7Account types: SAVINGS, INTEREST, BUSINESS");
+                    return true;
+                }
+                createAccount(player, bank, args[1], args[2]);
+                break;
+                
+            case "help":
+                sendHelp(player, bank);
+                break;
+                
+            default:
+                MessageUtil.sendError(player, "Unknown command! Use /" + bankName + " help");
+                break;
+        }
+        
+        return true;
+    }\n    \n    private void handleBankAccess(Player player, Bank bank) {\n        // Check if player has an account\n        BankAccount account = accountManager.getPlayerAccountAtBank(player.getUniqueId(), bank.getBankId());\n        \n        if (account == null) {\n            // No account - show account creation options\n            showAccountCreationInfo(player, bank);\n        } else {\n            // Has account - join queue or ask for password\n            joinBankQueue(player, bank, account);\n        }\n    }\n    \n    private void showAccountCreationInfo(Player player, Bank bank) {\n        player.sendMessage(\"§6§l═══ \" + bank.getDisplayName() + \" ═══\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§eYou don't have an account at this bank.\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§7Available Account Types:\");\n        \n        for (AccountType type : bank.getAvailableAccountTypes()) {\n            player.sendMessage(\"§e▸ \" + type.getDisplayName());\n            player.sendMessage(\"  §7\" + type.getDescription());\n        }\n        \n        player.sendMessage(\"\");\n        player.sendMessage(\"§7To create an account:\");\n        player.sendMessage(\"§f/\" + bank.getBankName() + \" create <type> <password>\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§7Example: §f/\" + bank.getBankName() + \" create SAVINGS mypass123\");\n    }\n    \n    private void createAccount(Player player, Bank bank, String typeStr, String password) {\n        // Parse account type\n        AccountType accountType;\n        try {\n            accountType = AccountType.valueOf(typeStr.toUpperCase());\n        } catch (IllegalArgumentException e) {\n            MessageUtil.sendError(player, \"Invalid account type: \" + typeStr);\n            player.sendMessage(\"§7Valid types: SAVINGS, INTEREST, BUSINESS\");\n            return;\n        }\n        \n        // Check if type is available\n        if (!bank.isAccountTypeAvailable(accountType)) {\n            MessageUtil.sendError(player, \"This account type is not available at this bank!\");\n            return;\n        }\n        \n        // Check if player already has max accounts\n        int currentAccounts = accountManager.getPlayerAccountCount(player.getUniqueId());\n        int maxAccounts = bankManager.getConfigManager().getMaxAccountsPerPlayer();\n        if (currentAccounts >= maxAccounts) {\n            MessageUtil.sendError(player, \"You already have the maximum number of accounts (\" + maxAccounts + \")!\");\n            return;\n        }\n        \n        // Check account creation costs\n        boolean canAfford = true;\n        StringBuilder costMsg = new StringBuilder(\"§eAccount creation cost:\\n\");\n        \n        for (var entry : bank.getAccountCreationCost().entrySet()) {\n            double cost = entry.getValue();\n            if (cost > 0) {\n                double balance = plugin.getEconomyAPI().getBalance(player.getUniqueId(), entry.getKey());\n                String status = balance >= cost ? \"§a✓\" : \"§c✗\";\n                costMsg.append(status).append(\" §7\").append(entry.getKey().name()).append(\": §f\")\n                       .append(String.format(\"%.2f\", cost)).append(\"\\n\");\n                if (balance < cost) {\n                    canAfford = false;\n                }\n            }\n        }\n        \n        if (!canAfford) {\n            player.sendMessage(costMsg.toString());\n            MessageUtil.sendError(player, \"You cannot afford to create an account!\");\n            return;\n        }\n        \n        // Deduct costs\n        for (var entry : bank.getAccountCreationCost().entrySet()) {\n            double cost = entry.getValue();\n            if (cost > 0) {\n                plugin.getEconomyAPI().removeCurrency(player.getUniqueId(), entry.getKey(), cost);\n            }\n        }\n        \n        // Create account\n        BankAccount account = accountManager.createAccount(\n            player.getUniqueId(),\n            player.getName(),\n            bank,\n            accountType,\n            password\n        );\n        \n        if (account != null) {\n            MessageUtil.sendSuccess(player, \"Account created successfully!\");\n            player.sendMessage(\"§eBank: §f\" + bank.getDisplayName());\n            player.sendMessage(\"§eAccount Type: §f\" + accountType.getDisplayName());\n            player.sendMessage(\"§eAccount Level: §f\" + account.getAccountLevel());\n            player.sendMessage(\"\");\n            player.sendMessage(\"§7Use §f/\" + bank.getBankName() + \" §7to access your account\");\n        } else {\n            MessageUtil.sendError(player, \"Failed to create account! Password may be invalid.\");\n            player.sendMessage(\"§7Password must be 4-32 characters\");\n            \n            // Refund costs\n            for (var entry : bank.getAccountCreationCost().entrySet()) {\n                double cost = entry.getValue();\n                if (cost > 0) {\n                    plugin.getEconomyAPI().addCurrency(player.getUniqueId(), entry.getKey(), cost);\n                }\n            }\n        }\n    }\n    \n    private void joinBankQueue(Player player, Bank bank, BankAccount account) {\n        // Check if account is locked\n        if (account.isLocked()) {\n            MessageUtil.sendError(player, \"Your account is locked! Contact an administrator.\");\n            return;\n        }\n        \n        // Join queue\n        if (queueManager.joinBankQueue(player, bank)) {\n            // If successfully joined active slot, prompt for password\n            if (queueManager.isInActiveSlot(player, bank)) {\n                promptForPassword(player, bank, account);\n            }\n        }\n    }\n    \n    private void promptForPassword(Player player, Bank bank, BankAccount account) {\n        player.sendMessage(\"§6§l═══ \" + bank.getDisplayName() + \" ═══\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§ePlease enter your password in chat:\");\n        player.sendMessage(\"§7(Type 'cancel' to exit)\");\n        \n        // Store password input state\n        passwordInputs.put(player.getUniqueId(), new PasswordInputState(bank, account));\n        \n        // TODO: Implement password listener\n        // For now, just open the account GUI\n        // openBankAccountGUI(player, bank, account);\n    }\n    \n    private void sendHelp(Player player, Bank bank) {\n        player.sendMessage(\"§6§l═══ \" + bank.getDisplayName() + \" Help ═══\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§e/\" + bank.getBankName() + \" §7- Access your account\");\n        player.sendMessage(\"§e/\" + bank.getBankName() + \" create <type> <password> §7- Create account\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§7Account Types: §fSAVINGS, INTEREST, BUSINESS\");\n        player.sendMessage(\"\");\n        player.sendMessage(\"§7Enabled Currencies:\");\n        for (var currency : bank.getEnabledCurrencies()) {\n            player.sendMessage(\"§e▸ §f\" + currency.name());\n        }\n    }\n    \n    // Helper class for password input state\n    private static class PasswordInputState {\n        private final Bank bank;\n        private final BankAccount account;\n        private final long timestamp;\n        \n        public PasswordInputState(Bank bank, BankAccount account) {\n            this.bank = bank;\n            this.account = account;\n            this.timestamp = System.currentTimeMillis();\n        }\n        \n        public Bank getBank() { return bank; }\n        public BankAccount getAccount() { return account; }\n        public long getTimestamp() { return timestamp; }\n    }\n}

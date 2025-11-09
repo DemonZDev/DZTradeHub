@@ -1,0 +1,39 @@
+# DZTradeHub Kits Configuration
+kits:
+  DefaultKit:
+    display-name: "§7Default Starter Kit"
+    description:
+      - "§7Basic starter items"
+      - "§7for all new players"
+    icon: WOODEN_SWORD
+    price: 0.0  # Free!
+    cooldown: 86400  # 24 hours in seconds
+    permission: "dztradehub.kit.default"
+    
+    items:
+      - WOODEN_SWORD
+      - WOODEN_PICKAXE
+      - COOKED_BEEF
+      - TORCH
+    
+    commands:
+      - "say %player% claimed the Default Kit!"
+      
+  VIPKit:
+    display-name: "§6VIP Premium Kit"
+    description:
+      - "§6Premium items for"
+      - "§6VIP members only"
+    icon: IRON_SWORD
+    price: 500.0
+    cooldown: 43200  # 12 hours
+    permission: "dztradehub.kit.vip"
+    
+    items:
+      - IRON_SWORD
+      - IRON_PICKAXE
+      - GOLDEN_APPLE
+      - DIAMOND
+    
+    commands:
+      - "say %player% claimed the VIP Kit!"

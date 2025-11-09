@@ -1,0 +1,136 @@
+# DZTradeHub Casino (Cashino) Configuration
+
+casino:
+  # Enable casino system
+  enabled: true
+  
+  # Coin Flip settings
+  coinflip:
+    # Enable coin flip
+    enabled: true
+    
+    # Request settings
+    request-expiry-minutes: 2
+    max-pending-requests: 10
+    
+    # Minimum bet amounts
+    minimum-bet:
+      money: 10.0
+      mobcoin: 1.0
+      gem: 0.1
+    
+    # Maximum bet amounts
+    maximum-bet:
+      money: 100000.0
+      mobcoin: 10000.0
+      gem: 1000.0
+    
+    # Win multipliers (default rank)
+    multipliers:
+      single-player: 2.0
+      double-player: 2.0
+    
+    # Rank-based multipliers (override in ranks.yml)
+    # Example:
+    # ranks:
+    #   vip:
+    #     single-player: 2.5
+    #     double-player: 2.5
+  
+  # Jackpot settings
+  jackpot:
+    # Enable jackpot
+    enabled: true
+    
+    # Minimum bet amounts
+    minimum-bet:
+      money: 10.0
+      mobcoin: 1.0
+      gem: 0.1
+    
+    # Maximum bet amounts
+    maximum-bet:
+      money: 100000.0
+      mobcoin: 10000.0
+      gem: 1000.0
+    
+    # Row configurations
+    rows:
+      # 3 Row jackpot
+      3:
+        enabled: true
+        multipliers:
+          # 2 symbols match
+          two-match: 0.8
+          # All 3 symbols match
+          three-match: 2.0
+          # Special symbols (777, diamonds, stars)
+          special:
+            seven: 10.0
+            diamond: 7.0
+            star: 5.0
+      
+      # 4 Row jackpot
+      4:
+        enabled: true
+        multipliers:
+          two-match: 0.5
+          three-match: 1.0
+          four-match: 2.0
+          special:
+            seven: 15.0
+            diamond: 10.0
+            star: 7.0
+      
+      # 5 Row jackpot
+      5:
+        enabled: true
+        multipliers:
+          two-match: 0.4
+          three-match: 0.8
+          four-match: 1.5
+          five-match: 3.0
+          special:
+            seven: 20.0
+            diamond: 15.0
+            star: 10.0
+    
+    # Symbols and their weights (higher = more common)
+    symbols:
+      cherry: 30
+      lemon: 25
+      orange: 20
+      grape: 15
+      diamond: 7
+      star: 5
+      seven: 3
+  
+  # Storage settings
+  storage:
+    # Save transactions to: FLATFILE, MYSQL, SQLITE
+    type: "FLATFILE"
+    
+    # Auto-save interval (seconds)
+    save-interval: 300
+  
+  # Cleanup settings
+  cleanup:
+    # Enable automatic cleanup of old transactions
+    enabled: true
+    
+    # Days to keep transaction history
+    retention-days: 30
+    
+    # Cleanup check interval (hours)
+    check-interval-hours: 6
+  
+  # Animation settings
+  animation:
+    # Enable animations
+    enabled: true
+    
+    # Animation duration (ticks)
+    duration: 30
+    
+    # Sound effects
+    sounds: true

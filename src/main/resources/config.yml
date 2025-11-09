@@ -1,0 +1,57 @@
+# DZTradeHub Configuration
+plugin-version: "1.0.0"
+
+# Economy settings
+economy:
+  currency-type: "MONEY"  # MONEY, MOBCOIN, GEM
+  use-short-format: true  # $1.5K vs $1500.00
+  minimum-transaction: 0.01
+
+# Database settings
+database:
+  type: "SQLITE"  # SQLITE or MYSQL
+  
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "dztradehub"
+    username: "root"
+    password: "password"
+    
+  connection-pool:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    connection-timeout: 30000
+
+# Queue settings (global defaults)
+queue:
+  enable-priority: true
+  max-queue-size: 50
+  queue-timeout: 300  # 5 minutes max wait
+  
+# Performance settings
+performance:
+  async-save: true
+  save-interval: 300  # Save to DB every 5 minutes
+  cache-size: 1000
+
+# Casino settings
+casino:
+  enabled: true
+  coinflip:
+    request-expiry-minutes: 2  # How long requests last
+  jackpot:
+    min-bet: 10
+    max-bet: 100000
+
+# Bounty settings
+bounty:
+  enabled: true
+  max-bounties-per-player: 5
+  
+# Update settings
+update:
+  check-on-start: true
+  runtime-check: true
+  check-interval-minutes: 60
+  auto-update: false

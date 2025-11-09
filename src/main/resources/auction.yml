@@ -1,0 +1,99 @@
+# DZTradeHub Auction Configuration
+
+auction:
+  # Enable auction house
+  enabled: true
+  
+  # Storage settings
+  storage:
+    # Save auctions to: FLATFILE, MYSQL, SQLITE
+    type: "FLATFILE"
+    
+    # Auto-save interval (seconds)
+    save-interval: 300
+  
+  # Cleanup settings
+  cleanup:
+    # Enable automatic cleanup of old auctions
+    enabled: true
+    
+    # Days to keep expired/completed auctions (0 = delete immediately)
+    retention-days: 30
+    
+    # Days to keep transaction history
+    transaction-retention-days: 30
+    
+    # Cleanup check interval (hours)
+    check-interval-hours: 6
+  
+  # Auction limits
+  limits:
+    # Maximum auction duration (days)
+    max-duration-days: 7
+    
+    # Minimum starting price
+    min-starting-price: 1.0
+    
+    # Maximum starting price
+    max-starting-price: 1000000.0
+    
+    # Minimum drop price
+    min-drop-price: 0.1
+  
+  # Queue settings
+  queue:
+    # Default max queue size for bidding auctions
+    default-max-queue: 10
+    
+    # Default queue hold time (seconds)
+    default-hold-time: 3600
+    
+    # Default price increase percentage
+    default-price-increase: 20.0
+  
+  # Currency settings
+  currency:
+    # Allow multiple currencies in auctions
+    multi-currency-enabled: true
+    
+    # Allowed currencies: MONEY, MOBCOIN, GEM
+    allowed-currencies:
+      - MONEY
+      - MOBCOIN
+      - GEM
+  
+  # Drop settings
+  drop:
+    # Default drop interval (hours)
+    default-interval-hours: 2
+    
+    # Default drop percentage
+    default-drop-percent: 10.0
+    
+    # Minimum drop percentage
+    min-drop-percent: 1.0
+    
+    # Maximum drop percentage
+    max-drop-percent: 50.0
+  
+  # GUI settings
+  gui:
+    # Items per page in auction browser
+    items-per-page: 45
+    
+    # Enable sound effects
+    sounds-enabled: true
+    
+    # Refresh interval (seconds)
+    refresh-interval: 10
+  
+  # Notification settings
+  notifications:
+    # Notify seller when auction is purchased
+    notify-on-purchase: true
+    
+    # Notify seller when auction expires
+    notify-on-expire: true
+    
+    # Notify buyer when outbid in queue
+    notify-on-outbid: true

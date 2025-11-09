@@ -1,0 +1,55 @@
+# DZTradeHub Bounty Configuration
+
+bounty:
+  # Enable bounty system
+  enabled: true
+  
+  # Maximum bounties a player can place
+  max-bounties-per-player: 5
+  
+  # Minimum currency amounts for bounties
+  minimum:
+    money: 100.0
+    mobcoin: 10.0
+    gem: 1.0
+  
+  # Storage settings
+  storage:
+    # Save bounties to: FLATFILE, MYSQL, SQLITE
+    type: "FLATFILE"
+    
+    # Auto-save interval (seconds)
+    save-interval: 300
+  
+  # Cleanup settings
+  cleanup:
+    # Enable automatic cleanup of old bounties
+    enabled: true
+    
+    # Days to keep completed/claimed bounties (0 = delete immediately)
+    retention-days: 30
+    
+    # Days to keep deleted bounties
+    deleted-retention-days: 30
+    
+    # Cleanup check interval (hours)
+    check-interval-hours: 6
+  
+  # Notification settings
+  notifications:
+    # Notify target when bounty is placed
+    notify-target: true
+    
+    # Notify creator when bounty is claimed
+    notify-creator: true
+    
+    # Notify all online players when bounty is claimed
+    broadcast-claim: true
+  
+  # GUI settings
+  gui:
+    # Maximum items that can be added as reward
+    max-reward-items: 27
+    
+    # Enable sound effects
+    sounds-enabled: true

@@ -1,0 +1,60 @@
+# DZTradeHub Ranks Configuration
+ranks:
+  default:
+    permission: "dztradehub.rank.default"
+    display-name: "§7Member"
+    buy-items: true
+    sell-items: true
+    max-cart-size: 27
+    queue-priority: 0
+    
+    areas:
+      Bazar:
+        - MeatShop
+        - VegetableShop
+      SuperMarket:
+        - BlockShop
+      Kits:
+        - DefaultKit
+    
+    auction:
+      can-list: true
+      max-listings: 3
+      listing-fee: 10.0
+      
+  vip:
+    permission: "dztradehub.rank.vip"
+    display-name: "§aVIP"
+    buy-items: true
+    sell-items: true
+    max-cart-size: 54
+    queue-priority: 1
+    
+    areas:
+      Bazar:
+        - ALL  # Access all shops in Bazar
+      SuperMarket:
+        - ALL
+      Kits:
+        - ALL
+    
+    auction:
+      can-list: true
+      max-listings: 10
+      listing-fee: 5.0
+      
+  admin:
+    permission: "dztradehub.rank.admin"
+    display-name: "§cAdmin"
+    buy-items: true
+    sell-items: true
+    max-cart-size: 54
+    queue-priority: 999  # Skip all queues!
+    
+    areas:
+      ALL: true  # Access everything everywhere
+    
+    auction:
+      can-list: true
+      max-listings: 999
+      listing-fee: 0.0

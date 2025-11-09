@@ -1,0 +1,191 @@
+name: DZTradeHub
+version: '1.0.0'
+main: online.demonzdevelopment.dztradehub.DZTradeHub
+api-version: '1.21'
+author: DemonZDev
+description: Advanced Multi-Shop Trading System with Auction House
+website: https://github.com/DemonZDev/DZTradeHub
+
+depend:
+  - DZEconomy
+
+commands:
+  dzth:
+    description: Main DZTradeHub admin command
+    usage: |
+      §6DZTradeHub Commands:
+      §e/dzth set-hand-item <area> <shop> <buy> <sell> §7- Add item from hand
+      §e/dzth set-buy-price <area> <shop> <id> <price> §7- Set buy price
+      §e/dzth set-sell-price <area> <shop> <id> <price> §7- Set sell price
+      §e/dzth add-item §7- Open item setup GUI
+      §e/dzth credit §7- Show plugin credits
+      §e/dzth update §7- Check for updates
+      §e/dzth reload §7- Reload configurations
+    aliases: [th]
+    permission: dztradehub.admin
+  
+  tradehub:
+    description: Browse marketplace areas
+    usage: |
+      §6TradeHub Commands:
+      §e/tradehub §7- Browse all areas
+      §e/tradehub help §7- Show help
+    aliases: []
+    permission: dztradehub.use
+    
+  ah:
+    description: Auction House commands
+    usage: |
+      §6Auction House Commands:
+      §e/ah §7- Open auction browser
+      §e/ah add-hand-item <actual> <maxdrop> <drop> <time> <unit> <queue> <increase> §7- List item
+      §e/ah rename-price <id> <actual> <maxdrop> <drop> <time> <unit> §7- Update auction
+      §e/ah cancel-item <id> §7- Cancel auction
+      §e/ah freeze-item <id> §7- Freeze auction
+      §e/ah un-freeze-item <id> §7- Resume auction
+      §e/ah manage-items §7- Open management GUI
+    aliases: [auction, auctionhouse]
+    permission: dztradehub.auction
+
+  casino:
+    description: Open casino with games
+    usage: /casino
+    aliases: [cashino]
+    permission: dztradehub.casino
+    
+  coinflip:
+    description: Coin flip game commands
+    usage: |
+      §6Coin Flip Commands:
+      §e/coinflip §7- Open coin flip GUI
+      §e/coinflip single §7- Open single coin flip GUI
+      §e/coinflip single <currency> <amount> <heads|tails> §7- Quick single flip
+      §e/coinflip double §7- Open double coin flip GUI
+      §e/coinflip double <currency> <amount> <heads|tails> <player> §7- Challenge player
+      §e/coinflip accept §7- Accept latest request
+      §e/coinflip deny §7- Deny latest request
+      §e/coinflip accept <number> §7- Accept specific request
+      §e/coinflip deny <number> §7- Deny specific request
+      §e/coinflip requests §7- View all requests (GUI)
+      §e/coinflip requests list §7- List requests in chat
+      §e/coinflip help §7- Show help
+    aliases: [cf]
+    permission: dztradehub.casino
+  
+  jackpot:
+    description: Jackpot game commands
+    usage: |
+      §6Jackpot Commands:
+      §e/jackpot §7- Open jackpot GUI
+      §e/jackpot <currency> <amount> <rows> §7- Quick spin
+      §e/jackpot help §7- Show help
+    permission: dztradehub.casino
+    
+  bounty:
+    description: Bounty system commands
+    usage: |
+      §6Bounty Commands:
+      §e/bounty §7- Open bounty GUI
+      §e/bounty create <player> §7- Create bounty (opens GUI)
+      §e/bounty delete <bounty_number> §7- Delete your bounty
+      §e/bounty list §7- List all bounties
+      §e/bounty manage <bounty_number> §7- Manage bounty
+      §e/bounty manage §7- Manage all your bounties (GUI)
+      §e/bounty help §7- Show help
+    permission: dztradehub.bounty
+  
+  bank:
+    description: Bank system commands
+    usage: |
+      §6Bank Commands:
+      §e/bank §7- Open bank list
+      §e/bank list §7- List all banks
+      §e/bank help §7- Show help
+      §c[ADMIN] /bank create <name> §7- Create bank
+      §c[ADMIN] /bank delete <name> §7- Delete bank
+      §c[ADMIN] /bank rename <old> <new> §7- Rename bank
+      §c[ADMIN] /bank config <name> §7- Configure bank
+    permission: dztradehub.bank
+  
+  sell:
+    description: Sell items to shops
+    usage: |
+      §6Sell Commands:
+      §e/sell §7- Open sell GUI
+      §e/sell <area> §7- Open area sell GUI
+      §e/sell <area> <shop> §7- Sell to specific shop
+    permission: dztradehub.use
+  
+  sellall:
+    description: Quick sell all inventory items
+    usage: |
+      §e/sellall §7- Sell all inventory
+      §e/sellall <area> §7- Sell to area
+      §e/sellall <area> <shop> §7- Sell to shop
+    permission: dztradehub.use
+  
+  sellhand:
+    description: Sell item in hand
+    usage: |
+      §e/sellhand §7- Sell hand item
+      §e/sellhand <area> §7- Sell to area
+      §e/sellhand <area> <shop> §7- Sell to shop
+    permission: dztradehub.use
+  
+  kits:
+    description: Kit management system
+    usage: |
+      §6Kits Commands:
+      §e/kits §7- Browse available kits
+      §e/kits claim <name> §7- Claim a kit
+      §c[ADMIN] /kits create <name> §7- Create kit
+      §c[ADMIN] /kits delete <name> §7- Delete kit
+      §c[ADMIN] /kits link <kit> <area> <shop> §7- Link kit to shop
+      §c[ADMIN] /kits unlink <kit> §7- Unlink kit
+    permission: dztradehub.use
+  
+  kit:
+    description: Access the Kit area shops
+    usage: /kit
+    permission: dztradehub.use
+
+permissions:
+  dztradehub.admin:
+    description: Full admin access
+    default: op
+  
+  dztradehub.use:
+    description: Use tradehub marketplace
+    default: true
+    
+  dztradehub.auction:
+    description: Use auction house
+    default: true
+    
+  dztradehub.casino:
+    description: Use casino games
+    default: true
+    
+  dztradehub.bounty:
+    description: Use bounty system
+    default: true
+  
+  dztradehub.bank:
+    description: Use bank system
+    default: true
+  
+  dztradehub.bank.admin:
+    description: Admin bank management
+    default: op
+    
+  dztradehub.rank.default:
+    description: Default rank access
+    default: true
+    
+  dztradehub.rank.vip:
+    description: VIP rank access
+    default: false
+    
+  dztradehub.rank.admin:
+    description: Admin rank access
+    default: op

@@ -1,0 +1,108 @@
+# MoG Bank Configuration (MobCoin + Gem)
+# Accepts MOBCOIN and GEM currencies
+
+bank-info:
+  name: "mog-bank"
+  display-name: "§a§lMoG Bank"
+  description:
+    - "§7MobCoin & Gem Bank"
+    - "§7Protection from death loss"
+    - "§eCurrency conversion available"
+
+enabled-currencies:
+  - MOBCOIN
+  - GEM
+
+features:
+  currency-conversion:
+    enabled: true
+    rates:
+      MOBCOIN-GEM: 5.0     # 5 MobCoin = 1 Gem
+      GEM-MOBCOIN: 0.2     # 1 Gem = 0.2 MobCoin
+    conversion-fee: 2.0
+  
+  account-transfer:
+    enabled: true
+    fee-percentage: 0.5
+  
+  bank-transfer:
+    enabled: true
+    fee-percentage: 1.0
+
+account-types:
+  - SAVINGS
+  - INTEREST
+  - BUSINESS
+
+loans:
+  enabled: true
+  min-amount: 100.0
+  max-amount: 10000.0
+  interest-rate: 4.5
+
+taxes:
+  deposit: 0.8
+  withdrawal: 1.2
+
+max-storage:
+  MOBCOIN:
+    level-1: 50000.0
+    level-2: 100000.0
+    level-3: 200000.0
+    level-4: 500000.0
+    level-5: 1000000.0
+  GEM:
+    level-1: 5000.0
+    level-2: 10000.0
+    level-3: 20000.0
+    level-4: 50000.0
+    level-5: 100000.0
+
+leveling:
+  max-level: 5
+  levels:
+    1:
+      deposit-tax-reduction: 0
+      withdrawal-tax-reduction: 0
+      interest-rate-bonus: 0
+      upgrade-cost: 0
+    2:
+      deposit-tax-reduction: 10
+      withdrawal-tax-reduction: 10
+      interest-rate-bonus: 0.5
+      upgrade-cost:
+        MOBCOIN: 5000
+        GEM: 500
+    3:
+      deposit-tax-reduction: 20
+      withdrawal-tax-reduction: 20
+      interest-rate-bonus: 1.0
+      upgrade-cost:
+        MOBCOIN: 15000
+        GEM: 1500
+    4:
+      deposit-tax-reduction: 35
+      withdrawal-tax-reduction: 35
+      interest-rate-bonus: 2.0
+      upgrade-cost:
+        MOBCOIN: 50000
+        GEM: 5000
+    5:
+      deposit-tax-reduction: 50
+      withdrawal-tax-reduction: 50
+      interest-rate-bonus: 3.0
+      upgrade-cost:
+        MOBCOIN: 150000
+        GEM: 15000
+
+reception:
+  slots: 15
+  time-limit-seconds: 300
+
+interest:
+  base-rate: 2.5
+  payout-interval-minutes: 60
+
+account-creation-cost:
+  MOBCOIN: 1500.0
+  GEM: 150.0

@@ -1,0 +1,54 @@
+# DZTradeHub Bank System Configuration
+# Main configuration file for the bank system
+
+# Global settings
+global:
+  # Maximum accounts a player can have across all banks
+  max-accounts-per-player: 1
+  
+  # Loan payment period (in minutes of real time)
+  # 30 Minecraft days ≈ 10 hours = 600 minutes
+  loan-payment-period-minutes: 600
+  
+  # Interest payout intervals (in minutes)
+  interest-payout-interval-minutes: 60
+  
+  # Queue system
+  queue:
+    enabled: true
+    max-wait-time-seconds: 300
+  
+  # Currency conversion rates (base rates, can be overridden per bank)
+  currency-conversion:
+    # MONEY to MOBCOIN
+    money-to-mobcoin: 10.0  # 10 Money = 1 MobCoin
+    # MONEY to GEM
+    money-to-gem: 50.0      # 50 Money = 1 Gem
+    # MOBCOIN to GEM
+    mobcoin-to-gem: 5.0     # 5 MobCoin = 1 Gem
+    # Enable conversion fee (percentage)
+    conversion-fee: 2.0     # 2% fee on conversions
+
+# Default bank templates
+default-banks:
+  enabled: true
+  auto-create-on-first-run: true
+  
+  # List of default banks to create
+  banks:
+    - money-bank
+    - mobcoin-bank
+    - gem-bank
+    - mmo-bank
+    - mg-bank
+    - mog-bank
+    - central-bank
+
+# Bank creation settings
+bank-creation:
+  # Minimum name length
+  min-name-length: 3
+  # Maximum name length
+  max-name-length: 20
+  # Allowed characters (regex)
+  name-pattern: "^[a-zA-Z0-9_-]+$"
