@@ -1,92 +1,364 @@
 # DZTradeHub - Complete Minecraft Economy Plugin
 
-[![PaperMC](https://img.shields.io/badge/PaperMC-1.21.1-blue)](https://papermc.io/)
-[![Java](https://img.shields.io/badge/Java-21-orange)](https://www.oracle.com/java/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen)](https://github.com/DemonZDev/DZTradeHub)
-[![Security](https://img.shields.io/badge/security-Hardened-success)](SECURITY_CHANGELOG.md)
 
-A comprehensive economy plugin featuring **Bank System**, **Bounty System**, **Casino Games**, **Auction House**, **Item Selling**, **Kits System**, and **Advanced Marketplace** for PaperMC 1.21.1
 
-## 🔐 Security & Quality Update (v1.1.0)
 
-**COMPREHENSIVE SECURITY & IMPROVEMENT UPDATE**
 
-### Version 1.1.0 - New Features:
 
-#### 🛡️ Security Enhancements
-- ✅ **Queue Session Protection** - Prevents session hijacking on disconnect/reconnect
-- ✅ **GUI Permission Re-checks** - Validates permissions on every GUI interaction
-- ✅ **Secure Error Handling** - Prevents information disclosure through error messages
-- ✅ **Admin Audit Logging** - Full accountability trail for all admin actions
-- ✅ **Password Logging Audit** - Verified no sensitive data in logs
 
-#### ⚡ Performance Improvements
-- ✅ **Async Account Loading** - Non-blocking startup for faster server boot
-- ✅ **Database Health Checks** - Auto-reconnect on connection loss (every 5 mins)
-- ✅ **Command Rate Limiting** - Prevents spam and DoS attacks
+A comprehensive economy plugin for PaperMC 1.21.1 featuring a full Bank System, Bounty System, Casino Games, Auction House, Item Selling, Kits, and an Advanced Marketplace. Built for Java 21 and Maven.
 
-#### 🎯 New Features
-- ✅ **Password Strength Meter** - Real-time feedback on password quality
-- ✅ **Transaction Export** - Export bank history to CSV format
-- ✅ **Automated Backups** - Pre-critical-operation database backups (keeps last 10)
-- ✅ **Enhanced Security Logging** - Dedicated security event log files
-
-### Previous Security Fixes (v1.0.1):
-- ✅ **PBKDF2 Password Hashing** - Secure bank account passwords (65K iterations)
-- ✅ **Brute-Force Protection** - 3-attempt lockout system (5 minutes)
-- ✅ **Transaction Atomicity** - Zero money loss on crashes
-- ✅ **Thread Safety** - Prevents money duplication exploits
-
-📄 [Full Changelog](CHANGELOG.md) | 📋 [Remaining Issues](REMAINING_ISSUES.md)
 
 ---
 
-## ✨ New Features
+## 📦 Release — v1.0.0 (Latest)
 
-### 🏦 Complete Bank System
-- **7 Default Banks** with different currency support
-- **3 Account Types** (Savings, Interest, Business)
-- **Loan System** with interest tracking
-- **Currency Conversion** between Money, MobCoin, Gem
-- **Inter-bank Transfers** and account-to-account transfers
-- **Level Progression** (5 levels) to reduce taxes
-- **Password Protection** for secure accounts
-- **Bank Payment Integration** in marketplace checkout
+This repository currently ships a single, production-ready release:
 
-### 🛒 Item Selling System
-- Sell items to shops with `/sell`, `/sellall`, `/sellhand`
-- GUI-based item selection
-- Auto-return unsellable items
-- Supports all shop currencies
+v1.0.0 — Initial stable release with core systems implemented and hardened security fixes applied (PBKDF2 password hashing, brute-force protection, transaction atomicity, thread-safety).
 
-### 📦 Enhanced Kits
-- `/kit` command for Kit area access (shops)
-- `/kits` command for claimable kit packs
-- Link kits to shops for selling
-- Cooldown and permission system
 
-## 🎯 Core Features
+> Note: This README describes the full feature set implemented in v1.0.0.
 
-### 1. 🏦 Bank System (NEW!)
-**Complete banking solution with 7 default banks!**
 
-Store your money safely, earn interest, take loans, and transfer between banks!
 
-**7 Default Banks:**
-- **Money Bank** - MONEY currency only, secure storage
-- **MobCoin Bank** - MOBCOIN currency only
-- **Gem Bank** - GEM currency only
-- **MMo Bank** - MONEY + MOBCOIN dual currency
-- **MG Bank** - MONEY + GEM dual currency
-- **MoG Bank** - MOBCOIN + GEM dual currency
-- **Central Bank** - All 3 currencies, premium features
 
-**Features:**
-- **3 Account Types:**
-  - **Savings Account** - Basic storage, full transfer rights (1.2x deposit, 1.3x withdrawal tax)
-  - **Interest Account** - Earn interest hourly, no transfers (0.5x deposit, 0.8x withdrawal tax)
-  - **Business Account** - Higher limits for traders (1.5x deposit, 1.8x withdrawal tax)
+---
+
+## ✨ Core Features (everything you shipped — laid out clean)
+
+### 1. 🏦 Bank System
+
+Full, GUI-driven banking with account security, loans, transfers, and level progression.
+
+7 Default Banks:
+
+Money Bank — MONEY only
+
+MobCoin Bank — MOBCOIN only
+
+Gem Bank — GEM only
+
+MMo Bank — MONEY + MOBCOIN
+
+MG Bank — MONEY + GEM
+
+MoG Bank — MOBCOIN + GEM
+
+Central Bank — MONEY + MOBCOIN + GEM
+
+
+3 Account Types: Savings, Interest, Business (different tax/limit rules)
+
+Account operations: create, deposit, withdraw, change password, convert account type
+
+Transfers: account-to-account (same bank), inter-bank transfers, player-to-player transfers
+
+Currency Conversion: configurable conversions when bank supports multiple currencies
+
+Loan System: configurable min/max loans, interest, repayment schedule and penalties
+
+Leveling: account/bank level progression reduces taxes and improves interest
+
+Global Taxes: configurable deposit/withdrawal tax percentages
+
+Max Storage Limits: per-currency, per-level configurations
+
+Queue System: reception queue for bank access; token/session validation to prevent hijacking
+
+Security: PBKDF2 password hashing, lockouts (brute-force protection), session tokens, input sanitization
+
+Commands:
+
+/bank — Open bank list GUI
+
+/bank list — List banks
+
+/<bank_name> — Quick access to specific bank (e.g., /money-bank)
+
+/<bank_name> create <SAVINGS|INTEREST|BUSINESS> <password> — Create account
+
+Admin: /bank create|delete|rename|config <name>
+
+
+
+
+---
+
+### 2. 💰 Bounty System
+
+Place bounties on other players with multiple currencies or item rewards.
+
+GUI-based bounty creation and management
+
+Multi-currency + item reward support (Money, MobCoin, Gem)
+
+Automatic reward distribution on successful bounty claim
+
+Bounty identifiers for easy management
+
+Privacy of reward amounts configurable
+
+Persistence in DB / flatfile
+
+
+Commands:
+
+/bounty, /bounty create <player>, /bounty delete <number>, /bounty list, /bounty manage [number]
+
+
+
+---
+
+### 3. 🎰 Casino System
+
+Multiple mini-games with GUI and quick commands.
+
+Coin Flip
+
+Single-player and challenge modes
+
+Requests list with numbered accept/deny
+
+Command API for single/double modes
+
+
+Jackpot (Slots)
+
+Spin with 3–5 rows
+
+Configurable multipliers and special symbols
+
+GUI and quick-spin command
+
+
+Commands:
+
+/coinflip family and /jackpot family commands
+
+
+
+---
+
+### 4. 🏪 Auction House
+
+Player-driven auctions with advanced listing types and queue behavior.
+
+Price-reduction and bidding queue listings
+
+Item numbering for management
+
+Auto-expiry, freeze/resume, refunds
+
+Rank-based listing limits and fees
+
+Persistent storage
+
+
+Commands:
+
+/ah, /ah add, /ah list, /ah manage [number], /ah remove <number>
+
+
+
+---
+
+### 5. 🛒 Advanced Marketplace & Item Selling
+
+Large multi-area marketplace with checkout and queue systems.
+
+6 Default Areas (SuperMarket, Bazar, PawnShop, Junkyard, BlackMarket, Kits) with dozens of shops
+
+Reception and Checkout queue systems (configurable slots, AFK detection)
+
+Buy / Sell / Both shop types; dynamic pricing; stock management
+
+Checkout counters and time-based processing
+
+Link shops for stock transfers
+
+Sell commands: /sell, /sellall, /sellhand (with area/shop args)
+
+Shop and area admin management commands
+
+
+
+---
+
+### 6. 📦 Kits System
+
+Starter kits and claimable packs for players and shops.
+
+/kit opens kit-area shops
+
+/kits manages claimable kits (cooldowns, permissions)
+
+Link kits to shops for sale
+
+Admin creation and quick-create commands
+
+
+
+---
+
+### 7. 🛠️ Utilities, Reliability & Security Features
+
+PBKDF2 password hashing with per-account salt and migration support
+
+Brute-force protection: configurable lockouts
+
+Transaction atomicity: DB transactions, rollback on failure
+
+Thread-safety: account-level locks, async-safe patterns
+
+Input sanitization and prepared statements to avoid SQL injection
+
+Audit logging for admin actions (configurable)
+
+Secure error handler (no internal leaks to players)
+
+Backup manager, DB health checks, and optional export tools
+
+
+
+---
+
+## ⚙️ Commands — Quick Reference
+
+(Abbreviated; full command list in /docs/commands.md or below in this file)
+
+Bank: /bank, /<bank_name>, /bank create|delete|config
+
+Sell: /sell, /sell <area> <shop>, /sellall
+
+Kits: /kit, /kits, /kits claim <name>
+
+Bounty: /bounty, /bounty create <player>, /bounty list
+
+Casino: /coinflip, /jackpot
+
+Auction: /ah, /ah add, /ah list
+
+Marketplace admin: /dzth create-area|delete-area|create-shop|config|migrate|reload
+
+
+(Full command reference included later in this README.)
+
+
+---
+
+## 🔧 Installation
+
+Requirements
+
+PaperMC 1.21.1
+
+Java 21
+
+DZEconomy plugin (required for currencies Money, MobCoin, Gem)
+
+
+Install
+
+1. Put DZTradeHub.jar into the plugins/ folder.
+
+
+2. Ensure DZEconomy is installed and running.
+
+
+3. Start server. Plugin auto-creates default areas, shops, and config files.
+
+
+
+Build from source
+
+# Java 21 + Maven required
+git clone https://github.com/DemonZDev/DZTradeHub.git
+cd DZTradeHub
+mvn clean package
+# Artifact: target/DZTradeHub.jar
+
+
+---
+
+## 🗄️ Storage & Migration
+
+Supports three storage modes:
+
+FlatFile (default) — YAML files
+
+SQLite — Embedded DB
+
+MySQL — External DB server
+
+
+Migrate with:
+
+/dzth migrate <flatfile|sqlite|mysql>
+
+Data tables (examples): banks, bank_accounts, bank_transactions, auctions, bounties, shops, shop_items, transactions, kit_cooldowns, player_carts.
+
+
+---
+
+## 🔒 Permissions (core)
+
+dztradehub.admin       # full admin
+dztradehub.use         # marketplace & basic features
+dztradehub.auction     # auction access
+dztradehub.casino      # casino access
+dztradehub.bounty      # bounty access
+dztradehub.bank        # bank access
+dztradehub.bank.admin  # bank admin
+
+
+---
+
+## 🧪 Testing & Verification
+
+Before production:
+
+1. Backup current data.
+
+
+2. Test password migration and lockout behavior with test accounts.
+
+
+3. Run concurrency tests on deposit/withdraw.
+
+
+4. Verify GUI permission revocation behavior.
+
+
+5. Confirm DB health checks and backups.
+
+
+
+If you need, I can create a verification checklist and a small integration test script for a headless Paper server.
+
+
+---
+
+
+## 📝 Contributing & Support
+
+Fork, branch, test, PR.
+
+Follow Java 21 style and existing patterns.
+
+Report bugs with logs, steps to reproduce, server version and plugin version.
+
+
+---
+
+
+## 👨‍💻 Maintainer
+
+DemonZDev — https://github.com/DemonZDev
+**The third plugin from DemonZ Development**
+
+
+---  - **Business Account** - Higher limits for traders (1.5x deposit, 1.8x withdrawal tax)
   
 - **Currency Conversion** - Convert between currencies at configured rates (if bank supports 2+ currencies)
 - **Account Transfers** - Transfer currency to other accounts in the same bank
