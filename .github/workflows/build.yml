@@ -1,0 +1,85 @@
+name: 🏗️ Build DZTradeHub
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 🚀 Build Plugin on Ubuntu 24.04
+    runs-on: ubuntu-24.04
+    
+    steps:
+      # ============================================
+      # 📦 SETUP PHASE
+      # ============================================
+      
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Install SDKMAN!
+        run: |
+          echo "📦 Installing SDKMAN!..."
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          echo "✅ SDKMAN! Version:"
+          sdk version
+      
+      # ============================================
+      # ☕ JAVA & MAVEN INSTALLATION
+      # ============================================
+      
+      - name: ☕ Install Java 21 (Oracle)
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          echo "📦 Installing Oracle Java 21..."
+          sdk install java 21-oracle
+          sdk default java 21-oracle
+          echo "✅ Java Version:"
+          java -version
+      
+      - name: 📦 Install Maven 3.9.11
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          echo "📦 Installing Maven 3.9.11..."
+          sdk install maven 3.9.11
+          sdk default maven 3.9.11
+          echo "✅ Maven Version:"
+          mvn -version
+      
+      # ============================================
+      # 🛠️ BUILD PHASE
+      # ============================================
+      
+      - name: 🛠️ Build DZTradeHub Plugin
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          echo "🔨 Starting Maven build..."
+          mvn clean package -DskipTests
+          echo "✅ Build completed successfully!"
+      
+      # ============================================
+      # 📤 ARTIFACT UPLOAD
+      # ============================================
+      
+      - name: 📤 Upload Plugin JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: DZTradeHub-1.0.0.jar
+          path: target/DZTradeHub-1.0.0.jar
+          compression-level: 0
+          if-no-files-found: error
+      
+      - name: 🎉 Build Summary
+        run: |
+          echo "════════════════════════════════════════"
+          echo "✅ DZTradeHub v1.0.0 Build Complete!"
+          echo "════════════════════════════════════════"
+          echo "📦 Java: Oracle JDK 21"
+          echo "🔧 Maven: 3.9.11"
+          echo "🖥️  OS: Ubuntu 24.04"
+          echo "📁 Artifact: DZTradeHub-v1.0.0.jar"
+          echo "════════════════════════════════════════"
